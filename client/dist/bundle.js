@@ -14,13 +14,43 @@ _angular2.default.module('olympics', ['ui.router']).config(function ($stateProvi
 
   $stateProvider.state('sports', {
     url: '/sports',
-    templateUrl: 'sports/sports-nav.html'
-  });
-}).controller('sportsController', function ($http) {
-  var _this = this;
+    templateUrl: 'sports/sports-nav.html',
+    resolve: {
+      sportsService: function sportsService($http) {
+        return $http.get('/sports');
+      }
+    },
+    controller: function controller(sportsService) {
+      this.sports = sportsService.data;
+    },
+    controllerAs: 'sportsCtrl'
+  }).state('sports.medals', {
+    url: '/:sportName',
+    templateUrl: 'sports/sports-medals.html',
+    resolve: {
+      sportService: function sportService($q) {
+        return $q(function (resolve, reject) {
+          var sport = {
+            "name": "Cycling",
+            "goldMedals": [{
+              "division": "Men's Spring",
+              "country": "UK",
+              "year": 2012
+            }, {
+              "division": "Women's Sprint",
+              "country": "Australia",
+              "year": 2012
 
-  $http.get('/sports').then(function (response) {
-    _this.sports = response.data;
+            }]
+          };
+          resolve({ data: sport });
+        });
+      }
+    },
+    controller: function controller(sportService) {
+      this.sport = sportService.data;
+    },
+    controllerAs: 'sportCtrl'
   });
 });
 
