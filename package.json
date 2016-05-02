@@ -10,7 +10,8 @@
   "author": "Rob Merrill <robgmerrill@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.5.5"
+    "angular": "^1.5.5",
+    "express": "^4.13.4"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",
