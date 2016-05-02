@@ -35,10 +35,21 @@ app.get('/sports/:name', (request, response) => {
 
 app.post('/sports/:name/medals', jsonParser, (request, response) => {
   let sportName = request.params.name;
-  let newMedal = request.body.medal;
-  console.log("Sport name: ", sportName);
-  console.log("medal: ", newMedal);
-  response.sendStatus(201);
+  let newMedal = request.body.medal || {};
+  if(!newMedal.division || !newMedal.year || !newMedal.country) {
+    response.status(400);
+  }
+  
+  let sports = mongoUtil.sports();
+  let query = {name: sportName};
+  let update = {$push: {goldMedals: newMedal}};
+
+  sports.findOneAndUpdate(query, update, (err, res) => {
+    if(err) {
+      response.sendStatus(400);
+    } 
+    response.sendStatus(201);
+  });
 });
 
 app.listen(3000, () => console.log('Listening on port 3000'));
