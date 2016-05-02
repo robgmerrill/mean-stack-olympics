@@ -18,4 +18,25 @@ app.get('/sports', (request, response) => {
   });
 });
 
+app.get('/sports/:name', (request, response) => {
+  let sportName = request.params.name;
+  console.log("Sport name: ", sportName);
+
+  let sport = {
+            "name": "Cycling", 
+            "goldMedals": [{
+              "division": "Men's Spring",
+              "country": "UK",
+              "year": 2012
+            }, {
+              "division": "Women's Sprint",
+              "country": "Australia",
+              "year": 2012
+            
+            }]
+          }; 
+
+  response.json(sport);
+})
+
 app.listen(3000, () => console.log('Listening on port 3000'));
