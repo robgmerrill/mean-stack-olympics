@@ -3,11 +3,19 @@
 let express = require('express');
 let app = express();
 
-app.use(express.static(__dirname + '/../client') );
+let mongoUtil = require('./mongoUtil');
+mongoUtil.connect();
+
+app.use( express.static(__dirname + '/../client') );
 
 
-app.get('/sports', (req, res) => {
-  response.json( ["Cycling", "Weightlifing", "Cycling"]);
+app.get('/sports', (request, response) => {
+  let sports = mongoUtil.sports();
+  sports.find().toArray((err, docs) => {
+    console.log(JSON.stringify(docs));
+    let sportNames = docs.map((sport) => sport.name);
+  response.json(sportNames);
+  });
 });
 
-app.listen(8181, () => console.log('Listening on port 8181'));
+app.listen(3000, () => console.log('Listening on port 3000'));
